@@ -58,11 +58,19 @@
    * Big Picture Popup for images and videos
    */
    document.querySelectorAll("[data-bigpicture]").forEach((function(e) {
+     if (!e || !e.dataset) return;
      e.addEventListener("click", (function(t){
        t.preventDefault();
-       const data =JSON.parse(e.dataset.bigpicture)
+       let data = {};
+       if (e.dataset.bigpicture) {
+         try {
+           data = JSON.parse(e.dataset.bigpicture)
+         } catch (err) {
+           console.error('BigPicture JSON parse error', err)
+         }
+       }
        BigPicture({
-        el: t.target,
+        el: t.currentTarget || t.target,
         ...data
       })
      })
